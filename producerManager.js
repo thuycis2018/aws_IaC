@@ -5,14 +5,14 @@ const ses = new AWS.SES({
     region: process.env.region
 });
 
-const CAKE_PRODUCER_EMAIL = process.env.cakeProducerEmail;
+const PRODUCER_EMAIL = process.env.producerEmail;
 const ORDERING_SYSTEM_EMAIL = process.env.orderingSystemEmail;
 
 module.exports.handlePlacedOrders = ordersPlaced => {
     var ordersPlacedPromises = [];
 
     for (let order of ordersPlaced) {
-        const temp = notifyCakeProducerByEmail(order);
+        const temp = notifyProducerByEmail(order);
         
         ordersPlacedPromises.push(temp);
     }
@@ -20,10 +20,10 @@ module.exports.handlePlacedOrders = ordersPlaced => {
     return Promise.all(ordersPlacedPromises);
 }
 
-function notifyCakeProducerByEmail(order) {
+function notifyProducerByEmail(order) {
     const params = {
         Destination: {
-            ToAddresses: [CAKE_PRODUCER_EMAIL]
+            ToAddresses: [PRODUCER_EMAIL]
         },
         Message: {
             Body: {
@@ -32,7 +32,7 @@ function notifyCakeProducerByEmail(order) {
                 }
             },
             Subject: {
-                Data: 'New cake order'
+                Data: 'New order'
             }
         },
         Source: ORDERING_SYSTEM_EMAIL

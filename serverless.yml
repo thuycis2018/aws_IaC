@@ -34,6 +34,10 @@ provider:
       Resource:
         - arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:deliveryServiceQueue
         - arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:customerServiceQueue
+    - Effect: Allow
+      Action:
+        - cloudwatch:PutMetricData
+      Resource: "*"
 
 functions:
   createOrder:
